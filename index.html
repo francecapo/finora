@@ -2616,7 +2616,8 @@ function toggleMovementFields(){
   const investmentNote=document.getElementById('investmentNote');
 
   sectionField.hidden=true;
-  categoryField.hidden=!isInvestment;
+  const isExpense=type==='expense';
+  categoryField.hidden=!(isExpense||isInvestment);
   incomeField.hidden=!isIncome;
   transferFromField.hidden=!usesAccountTransfer;
   transferToField.hidden=!usesAccountTransfer;
@@ -2626,7 +2627,7 @@ function toggleMovementFields(){
   investmentNote.hidden=!isInvestment;
 
   sectionField.style.display='none';
-  categoryField.style.display=isInvestment?'':'none';
+  categoryField.style.display=(isExpense||isInvestment)?'':'none';
   incomeField.style.display=isIncome?'':'none';
 
   if(isInvestment){
@@ -2635,7 +2636,7 @@ function toggleMovementFields(){
   }
 
   expenseSection.required=false;
-  expenseCategory.required=isInvestment;
+  expenseCategory.required=isExpense||isInvestment;
   incomeCategory.required=isIncome;
   expenseDate.required=!usesAccountTransfer;
   movementAccount.required=!usesAccountTransfer;
