@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="dark" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <title>Spese 2026</title>
 <style>
 .mrange{margin-top:2px;font-size:10.5px;color:var(--muted);letter-spacing:.02em}
@@ -344,7 +344,8 @@ button,.route-link,.month-row,.category-option,.category-remove,.category-add-ro
 
 /* Refinements v22: remove excessive top safe-area spacing in file viewers */
 @media(max-width:760px){
-  header{padding-top:0}
+  header{padding-top:max(12px, env(safe-area-inset-top)) !important}
+  .head{padding-top:max(12px, env(safe-area-inset-top)) !important}
 }
 
 
