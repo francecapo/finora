@@ -3849,6 +3849,40 @@ Inserisci 1, 2 o 3:`
 });
 </script>
 
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('./sw.js');
+
+      reg.addEventListener('updatefound', () => {
+        const worker = reg.installing;
+        if (!worker) return;
+
+        worker.addEventListener('statechange', () => {
+          if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+            if (confirm('È disponibile un aggiornamento dell\'app. Aggiornare ora?')) {
+              worker.postMessage({type:'SKIP_WAITING'});
+            }
+          }
+        });
+      });
+
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      });
+
+    } catch(e){
+      console.error('Service Worker:', e);
+    }
+  });
+}
+</script>
+
 </body></html>
 <style>
 @media(max-width:760px){
