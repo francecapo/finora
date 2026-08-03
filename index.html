@@ -584,8 +584,16 @@ button,.route-link,.month-row,.category-option,.category-remove,.category-add-ro
 .goal{padding:6px!important}
 .goalgrid{gap:3px!important}
 .fieldbox{padding:2px 5px!important;min-height:32px!important}
-.fieldbox input{font-size:14px!important}
+.fieldbox input{font-size:16px!important}
 }
+
+
+/* v25: percentuali obiettivo minimal */
+.goalgrid{align-items:end!important}
+.fieldbox{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;min-height:auto!important;display:flex;justify-content:center;align-items:center}
+.fieldbox input{background:transparent!important;border:0!important;font-size:16px!important;font-weight:900!important;text-align:center!important;padding:0!important;width:64px!important;max-width:64px!important;font-size:16px!important;-webkit-text-size-adjust:100%!important}
+
+@media(max-width:760px){.fieldbox input{font-size:16px!important;-webkit-text-size-adjust:100%!important}.fieldbox::after{font-size:18px}}
 
 </style>
 
@@ -932,7 +940,7 @@ header{background:rgba(11,18,32,.88)!important;backdrop-filter:blur(18px);-webki
 .brand strong.display{font-size:15px!important;font-weight:800!important;letter-spacing:.08em!important}
 .brand .sub{font-size:12px!important}.autosave-status{font-size:11px!important}
 .nav{gap:8px!important;padding:5px!important;border:1px solid var(--border-soft);border-radius:16px;background:rgba(255,255,255,.025)}
-.nav a{padding:10px 15px!important;border-radius:11px!important;color:var(--muted)!important;font-size:13px!important;font-weight:700!important}
+.nav a{padding:10px 15px!important;border-radius:11px!important;color:var(--muted)!important;font-size:16px!important;font-weight:700!important}
 .nav a.active{background:var(--primary)!important;color:#06131c!important;box-shadow:0 8px 20px -14px rgba(45,212,191,.9)}
 main{max-width:1180px!important;padding:28px 22px 110px!important}
 .page{animation:pageIn .22s ease}
@@ -941,13 +949,13 @@ main{max-width:1180px!important;padding:28px 22px 110px!important}
 .title{margin:0!important;font-size:clamp(30px,4vw,42px)!important;line-height:1.05!important;font-weight:850!important;letter-spacing:-.045em!important}
 h1,h2,h3{letter-spacing:-.025em}
 h2{font-size:19px!important;line-height:1.25!important;font-weight:780!important}
-.sub{color:var(--muted)!important;font-size:13px!important;line-height:1.5!important}
+.sub{color:var(--muted)!important;font-size:16px!important;line-height:1.5!important}
 .surface,.card,.detailed-categories,.transfer-history{background:linear-gradient(180deg,rgba(26,38,59,.96),rgba(21,31,50,.96))!important;border:1px solid var(--border-soft)!important;border-radius:var(--radius)!important;box-shadow:var(--shadow)!important}
 .surface{padding:24px!important}.card{padding:20px!important}
 .kicker{color:var(--muted)!important;font-size:11px!important;font-weight:800!important;letter-spacing:.075em!important;text-transform:uppercase!important}
 .value,.accounts-total,.account-balance{font-variant-numeric:tabular-nums;letter-spacing:-.035em!important}
 .accounts-total{font-size:clamp(36px,6vw,56px)!important;line-height:1!important;font-weight:850!important;color:var(--fg)!important;margin-top:10px!important}
-.accounts-change{margin-top:12px!important;font-size:13px!important;font-weight:750!important}
+.accounts-change{margin-top:12px!important;font-size:16px!important;font-weight:750!important}
 .category-chip,.accounts-pill{border-radius:999px!important;border:1px solid var(--border-soft)!important;background:rgba(255,255,255,.035)!important;color:var(--muted)!important;padding:8px 11px!important;font-size:11px!important;font-weight:750!important}
 .accounts-title-row{align-items:center!important}
 .accounts-add-btn{width:50px!important;height:50px!important;border-radius:16px!important;background:linear-gradient(135deg,var(--primary),var(--primary-strong))!important;color:#07111f!important;box-shadow:0 14px 28px -18px rgba(45,212,191,.9)!important;font-size:32px!important}
@@ -967,12 +975,12 @@ h2{font-size:19px!important;line-height:1.25!important;font-weight:780!important
 .account-icon-btn:hover{background:rgba(45,212,191,.1)!important;border-color:rgba(45,212,191,.3)!important;color:var(--primary)!important}
 .account-icon-btn.danger:hover{background:rgba(239,68,68,.1)!important;border-color:rgba(239,68,68,.25)!important;color:var(--negative)!important}
 form{gap:16px!important}
-label{color:var(--muted)!important;font-size:12px!important;font-weight:700!important}
+label{color:var(--muted)!important;font-size:16px!important;font-weight:700!important}
 input,select,textarea,.category-picker-trigger,.movement-account-select{min-height:48px!important;border-radius:14px!important;border:1px solid var(--border)!important;background:#111b2c!important;color:var(--fg)!important;padding:12px 14px!important;outline:none!important;box-shadow:none!important;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition)!important}
 textarea{min-height:100px!important;resize:vertical}
 input:focus,select:focus,textarea:focus,.category-picker-trigger:focus{border-color:var(--primary)!important;box-shadow:0 0 0 4px rgba(45,212,191,.11)!important;background:#132035!important}
 input::placeholder,textarea::placeholder{color:#64748b!important}
-.btn{min-height:46px!important;padding:11px 18px!important;border:0!important;border-radius:14px!important;background:linear-gradient(135deg,var(--primary),var(--primary-strong))!important;color:#06131c!important;font-size:13px!important;font-weight:800!important;box-shadow:0 12px 24px -18px rgba(45,212,191,.85)!important}
+.btn{min-height:46px!important;padding:11px 18px!important;border:0!important;border-radius:14px!important;background:linear-gradient(135deg,var(--primary),var(--primary-strong))!important;color:#06131c!important;font-size:16px!important;font-weight:800!important;box-shadow:0 12px 24px -18px rgba(45,212,191,.85)!important}
 .btn.secondary{background:rgba(255,255,255,.035)!important;color:var(--fg)!important;border:1px solid var(--border)!important;box-shadow:none!important}
 .btn.danger{background:linear-gradient(135deg,#f87171,#ef4444)!important;color:#fff!important}
 .account-icon-option,.account-color-option{width:44px!important;height:44px!important;border-radius:13px!important;background:#111b2c!important}
@@ -1003,7 +1011,7 @@ input::placeholder,textarea::placeholder{color:#64748b!important}
 .summary-average-block .value{font-size:clamp(18px,2.5vw,24px)!important}
 .months{gap:10px!important}.month{border-radius:18px!important;padding:16px!important;box-shadow:none!important}
 .month.selected{border-color:rgba(45,212,191,.45)!important;box-shadow:0 0 0 3px rgba(45,212,191,.09)!important}
-.month .mname{font-size:12px!important;font-weight:800!important}.month .mval{font-size:14px!important;font-weight:780!important}
+.month .mname{font-size:16px!important;font-weight:800!important}.month .mval{font-size:14px!important;font-weight:780!important}
 .month-detail{margin-top:14px!important}.month-summary{gap:12px!important}
 .detailed-categories-summary,.transfer-history-summary{padding:18px 20px!important}
 .detailed-categories-chevron,.transfer-history-chevron{width:38px!important;height:38px!important;border-radius:12px!important}
@@ -1888,7 +1896,7 @@ body.account-is-dragging{
 .goalgrid .fieldbox input{
   min-width:0!important;
   padding:0!important;
-  font-size:13px!important;
+  font-size:16px!important;
   line-height:1!important;
   text-align:right!important;
 }
@@ -2013,7 +2021,7 @@ document.querySelectorAll('.summary-average-block .hint').forEach(function(e){if
     <form id="accountForm" class="account-form">
       <div class="account-name-field"><label for="accountName">Nome</label><input id="accountName" maxlength="50" placeholder="Es. Conto principale" required></div>
       <div><label for="accountType">Tipologia</label><select id="accountType"><option value="liquidity">Liquidità</option><option value="emergency">Fondo di emergenza</option><option value="investment">Investimento</option><option value="pension">Pensione integrativa</option></select></div>
-      <div><label for="accountInitial">Saldo iniziale</label><input id="accountInitial" type="number" step="0.01" inputmode="decimal" value="0" required></div>
+      <div><label for="accountInitial">Saldo iniziale</label><input id="accountInitial" type="number" step="0.01" inputmode="numeric" pattern="[0-9]*" value="0" required></div>
       <div class="full account-style-picker">
         <div><div class="account-style-label">Icona</div><div class="account-icon-grid" id="accountIconGrid"></div></div>
         <div><div class="account-style-label">Colore</div><div class="account-color-grid" id="accountColorGrid"></div></div>
@@ -2057,7 +2065,7 @@ document.querySelectorAll('.summary-average-block .hint').forEach(function(e){if
         <div class="daily-form">
           <div><label for="movementType">Tipo di movimento</label><select id="movementType" required><option value="expense">Aggiungi uscita</option><option value="income">Aggiungi entrata</option><option value="transfer">Trasferimento</option><option value="investment">Investimento</option></select></div>
           <div id="standardDateField"><label for="expenseDate">Data</label><input id="expenseDate" type="date" required></div>
-          <div><label for="expenseAmount">Importo</label><input id="expenseAmount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0,00 €" required></div>
+          <div><label for="expenseAmount">Importo</label><input id="expenseAmount" type="number" min="0.01" step="0.01" inputmode="numeric" pattern="[0-9]*" placeholder="0,00 €" required></div>
           <div id="standardAccountField"><label for="paymentPickerTrigger" id="methodLabel">Metodo di pagamento</label><div class="category-picker" id="paymentPicker"><button type="button" class="category-picker-trigger" id="paymentPickerTrigger" aria-haspopup="listbox" aria-expanded="false"><span id="paymentPickerLabel">Seleziona un metodo</span><span class="category-picker-chevron">⌄</span></button><div class="category-picker-menu" id="paymentPickerMenu" role="listbox" hidden></div></div><select id="expenseMethod" class="category-native-select" aria-hidden="true" tabindex="-1"></select></div><div hidden><label for="movementAccount">Conto</label><select id="movementAccount" class="movement-account-select" required><option value="">Crea prima un conto</option></select></div>
           
           <div class="movement-field transfer-movement-field" id="transferFromField" hidden><label for="transferFrom">Da conto</label><select id="transferFrom"></select></div>
@@ -2139,7 +2147,7 @@ document.querySelectorAll('.summary-average-block .hint').forEach(function(e){if
 </div>
 </section>
 
-<section class="section surface"><h2>Suddivisione spese</h2><p class="sub">Distribuzione reale delle uscite registrate</p><div class="goal"><div class="goalhead"><strong>PERCENTUALI OBIETTIVO</strong><span id="goalTotal" class="goal-total">Totale 100%</span></div><div class="goalgrid"><div class="field"><label for="goalNecessita" style="color:var(--necessita)">Necessità</label><div class="fieldbox"><input id="goalNecessita" class="goal-input" data-goal="necessita" type="number" min="0" max="100" step="1" inputmode="decimal" value="50"><span>%</span></div></div><div class="field"><label for="goalExtra" style="color:var(--extra)">Extra</label><div class="fieldbox"><input id="goalExtra" class="goal-input" data-goal="extra" type="number" min="0" max="100" step="1" inputmode="decimal" value="30"><span>%</span></div></div><div class="field"><label for="goalRisparmi" style="color:var(--risparmi)">Risparmi</label><div class="fieldbox"><input id="goalRisparmi" class="goal-input" data-goal="risparmi" type="number" min="0" max="100" step="1" inputmode="decimal" value="20"><span>%</span></div></div></div><div class="sum" id="goalHint">Le percentuali devono totalizzare 100%.</div></div>
+<section class="section surface"><h2>Suddivisione spese</h2><p class="sub">Distribuzione reale delle uscite registrate</p><div class="goal"><div class="goalhead"><strong>PERCENTUALI OBIETTIVO</strong><span id="goalTotal" class="goal-total">Totale 100%</span></div><div class="goalgrid"><div class="field"><label for="goalNecessita" style="color:var(--necessita)">Necessità</label><div class="fieldbox"><input id="goalNecessita" class="goal-input" data-goal="necessita" type="number" min="0" max="100" step="1" inputmode="numeric" pattern="[0-9]*" value="50"><span>%</span></div></div><div class="field"><label for="goalExtra" style="color:var(--extra)">Extra</label><div class="fieldbox"><input id="goalExtra" class="goal-input" data-goal="extra" type="number" min="0" max="100" step="1" inputmode="numeric" pattern="[0-9]*" value="30"><span>%</span></div></div><div class="field"><label for="goalRisparmi" style="color:var(--risparmi)">Risparmi</label><div class="fieldbox"><input id="goalRisparmi" class="goal-input" data-goal="risparmi" type="number" min="0" max="100" step="1" inputmode="numeric" pattern="[0-9]*" value="20"><span>%</span></div></div></div><div class="sum" id="goalHint">Le percentuali devono totalizzare 100%.</div></div>
 <div id="splitBars"></div></section>
 <section class="section" id="summaryMonthsSection"><h2>Mesi</h2><p class="sub">Tocca un mese per aprire il dettaglio. Toccalo di nuovo per chiuderlo.</p><div class="months" id="summaryMonths"></div><section class="surface month-detail" id="monthDetail" hidden></section></section>
 <section class="section detailed-categories-section">
@@ -2211,7 +2219,7 @@ document.querySelectorAll('.summary-average-block .hint').forEach(function(e){if
         </div>
         <div>
           <label for="movementEditAmount">Importo</label>
-          <input id="movementEditAmount" type="number" min="0.01" step="0.01" inputmode="decimal" required>
+          <input id="movementEditAmount" type="number" min="0.01" step="0.01" inputmode="numeric" pattern="[0-9]*" required>
         </div>
         <div class="full">
           <label for="movementEditAccount">Metodo di pagamento</label>
@@ -2265,7 +2273,7 @@ document.querySelectorAll('.summary-average-block .hint').forEach(function(e){if
         </div>
         <div>
           <label for="transferEditAmount">Importo</label>
-          <input id="transferEditAmount" type="number" min="0.01" step="0.01" inputmode="decimal" required>
+          <input id="transferEditAmount" type="number" min="0.01" step="0.01" inputmode="numeric" pattern="[0-9]*" required>
         </div>
         <div>
           <label for="transferEditDate">Data</label>
@@ -2308,7 +2316,7 @@ document.querySelectorAll('.summary-average-block .hint').forEach(function(e){if
         </div>
         <div>
           <label for="accountEditInitial">Saldo iniziale</label>
-          <input id="accountEditInitial" type="number" step="0.01" inputmode="decimal" required>
+          <input id="accountEditInitial" type="number" step="0.01" inputmode="numeric" pattern="[0-9]*" required>
         </div>
         <div class="full account-style-picker">
           <div>
@@ -3882,6 +3890,41 @@ if ('serviceWorker' in navigator) {
     }
   });
 }
+</script>
+
+
+<script>
+document.addEventListener('focusout',e=>{
+ if(e.target.closest('.fieldbox')){
+   requestAnimationFrame(()=>{
+     if(document.activeElement) document.activeElement.blur();
+     const vp=document.querySelector('meta[name=viewport]');
+     if(vp){
+       vp.setAttribute('content','width=device-width, initial-scale=1, viewport-fit=cover');
+     }
+     window.scrollTo({top:window.scrollY,left:0,behavior:'instant'});
+   });
+ }
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  document.querySelectorAll('.goal .fieldbox input').forEach(inp=>{
+    inp.setAttribute('readonly','readonly');
+    inp.style.cursor='pointer';
+    inp.addEventListener('click',()=>{
+      const v=prompt("Nuova percentuale", inp.value);
+      if(v===null) return;
+      const n=parseInt(v,10);
+      if(Number.isNaN(n)) return;
+      inp.value=n;
+      inp.dispatchEvent(new Event('input',{bubbles:true}));
+      inp.dispatchEvent(new Event('change',{bubbles:true}));
+    });
+  });
+});
 </script>
 
 </body></html>
