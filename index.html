@@ -2413,7 +2413,7 @@ document.querySelectorAll('.summary-average-block .hint').forEach(function(e){if
     <div class="editor-header">
       <div>
         <h2 id="accountEditTitle">Modifica conto</h2>
-        <p class="sub">Aggiorna nome, tipologia, saldo iniziale, icona e colore.</p>
+        <p class="sub">Aggiorna nome, tipologia, saldo ad oggi, icona e colore.</p>
       </div>
       <button type="button" class="editor-close" id="accountEditClose" aria-label="Chiudi">×</button>
     </div>
@@ -2433,8 +2433,12 @@ document.querySelectorAll('.summary-average-block .hint').forEach(function(e){if
           </select>
         </div>
         <div>
-          <label for="accountEditInitial">Saldo iniziale</label>
+          <label for="accountEditInitial">Saldo ad oggi</label>
           <input id="accountEditInitial" type="text" inputmode="decimal" required="">
+        </div>
+        <div>
+          <label for="accountEditBalanceDate">Saldo alla data</label>
+          <input id="accountEditBalanceDate" type="date" required="">
         </div>
         <div class="full account-style-picker">
           <div>
@@ -2638,6 +2642,7 @@ const accountEditModal=document.getElementById('accountEditModal'),
       accountEditName=document.getElementById('accountEditName'),
       accountEditType=document.getElementById('accountEditType'),
       accountEditInitial=document.getElementById('accountEditInitial'),
+      accountEditBalanceDate=document.getElementById('accountEditBalanceDate'),
       accountEditIconGrid=document.getElementById('accountEditIconGrid'),
       accountEditColorGrid=document.getElementById('accountEditColorGrid'),
       accountEditError=document.getElementById('accountEditError');
@@ -2658,7 +2663,9 @@ function openAccountEdit(id){
   editingAccountId=id;
   accountEditName.value=account.name||'';
   accountEditType.value=account.type||'liquidity';
-  accountEditInitial.value=amountToInput(account.initialBalance);
+  const balanceDate=isoToday();
+  if(accountEditBalanceDate)accountEditBalanceDate.value=balanceDate;
+  accountEditInitial.value=amountToInput(accountBalanceAt(account.id,balanceDate));
   selectedEditAccountIcon=account.icon||defaultAccountIcon(account.type);
   selectedEditAccountColor=account.color||defaultAccountColor(account.type);
   renderAccountEditStylePickers();
@@ -2685,6 +2692,20 @@ function accountBalance(id){
   value-=total(state.transfers.filter(x=>x.fromAccountId===id));
   return value;
 }
+function accountMovementsSum(id,untilDate){
+  const upTo=d=>!untilDate||String(d||'')<=untilDate;
+  let value=0;
+  value+=total(state.incomes.filter(x=>x.accountId===id&&upTo(x.date)));
+  value-=total(state.expenses.filter(x=>x.accountId===id&&upTo(x.date)));
+  value+=total(state.transfers.filter(x=>x.toAccountId===id&&upTo(x.date)));
+  value-=total(state.transfers.filter(x=>x.fromAccountId===id&&upTo(x.date)));
+  return value;
+}
+function accountBalanceAt(id,date){
+  const account=accountById(id);if(!account)return 0;
+  return Number(account.initialBalance||0)+accountMovementsSum(id,date);
+}
+function isoToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function accountOptions(selected=''){
   const options=state.accounts.map(a=>`<option value="${escapeHtml(a.id)}"${a.id===selected?' selected':''}>${escapeHtml(a.name)}</option>`).join('');
   return options||'<option value="">Crea prima un conto</option>';
@@ -3331,6 +3352,13 @@ accountEditColorGrid.addEventListener('click',e=>{
   selectedEditAccountColor=btn.dataset.editAccountColor;
   renderAccountEditStylePickers();
 });
+if(accountEditBalanceDate){
+  accountEditBalanceDate.addEventListener('change',()=>{
+    const account=accountById(editingAccountId);
+    if(!account)return;
+    accountEditInitial.value=amountToInput(accountBalanceAt(account.id,accountEditBalanceDate.value||isoToday()));
+  });
+}
 accountEditType.addEventListener('change',e=>{
   selectedEditAccountIcon=defaultAccountIcon(e.target.value);
   selectedEditAccountColor=defaultAccountColor(e.target.value);
@@ -3341,14 +3369,16 @@ accountEditForm.addEventListener('submit',e=>{
   const account=accountById(editingAccountId);
   if(!account){closeAccountEdit();return;}
   const name=accountEditName.value.trim();
-  const initial=parseAmount(accountEditInitial.value||'0');if(!Number.isFinite(initial)){accountEditInitial.focus();return;}
+  const targetBalance=parseAmount(accountEditInitial.value||'0');if(!Number.isFinite(targetBalance)){accountEditInitial.focus();return;}
+  const balanceDate=(accountEditBalanceDate&&accountEditBalanceDate.value)||isoToday();
+  const initial=targetBalance-accountMovementsSum(account.id,balanceDate);
   if(!name){
     accountEditError.textContent='Inserisci un nome per il conto.';
     accountEditName.focus();
     return;
   }
   if(!Number.isFinite(initial)){
-    accountEditError.textContent='Inserisci un saldo iniziale valido.';
+    accountEditError.textContent='Inserisci un saldo valido.';
     accountEditInitial.focus();
     return;
   }
