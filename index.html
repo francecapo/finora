@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"/>
 <meta name="theme-color" content="#182235"/>
 <meta name="color-scheme" content="dark"/>
 <meta name="mobile-web-app-capable" content="yes"/>
@@ -1990,6 +1990,13 @@ document.querySelectorAll('.summary-average-block .hint').forEach(function(e){if
 });
 </script>
 
+<style>
+/* Anti-zoom iOS: i campi sotto i 16px fanno zoomare la pagina al focus */
+@media (pointer:coarse){
+input,select,textarea{font-size:16px !important}
+.daily-form input,.daily-form select{font-size:16px !important}
+}
+</style>
 </head>
 <body>
 <header><div class="head">
@@ -4741,7 +4748,7 @@ document.addEventListener('focusout',e=>{
      if(document.activeElement) document.activeElement.blur();
      const vp=document.querySelector('meta[name=viewport]');
      if(vp){
-       vp.setAttribute('content','width=device-width, initial-scale=1, viewport-fit=cover');
+       vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover');
      }
      window.scrollTo({top:window.scrollY,left:0,behavior:'instant'});
    });
