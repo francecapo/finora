@@ -3133,14 +3133,21 @@ function openMovementEdit(type,id){
   movementEditAccount.innerHTML=accountOptions(movement.accountId||'');
   movementEditAccount.value=movement.accountId||state.accounts[0]?.id||'';
   const isIncome=type==='income';
+  const isLoan=typeof isLoanEntry==='function'&&isLoanEntry(movement);
+  const loanDefaultDesc=movement.loanDirection==='in'?'Rientro prestito':'Prestito';
   const currentSub=String((isIncome?movement.category:(movement.item||movement.group))||'').trim();
   const currentDesc=String(movement.description||'').trim();
-  movementEditDescription.value=currentDesc&&currentDesc!==currentSub?currentDesc:'';
-  movementEditExpenseSection.hidden=isIncome;
-  movementEditExpenseCategory.hidden=isIncome;
-  movementEditIncomeSection.hidden=!isIncome;
-  document.getElementById('movementEditSubtitle').textContent=isIncome?'Entrata':'Uscita';
-  if(isIncome){
+  movementEditDescription.value=currentDesc&&currentDesc!==currentSub&&(!isLoan||currentDesc!==loanDefaultDesc)?currentDesc:'';
+  movementEditExpenseSection.hidden=isIncome||isLoan;
+  movementEditExpenseCategory.hidden=isIncome||isLoan;
+  movementEditIncomeSection.hidden=!isIncome||isLoan;
+  document.getElementById('movementEditSubtitle').textContent=isLoan?`Prestito ${movement.loanDirection==='in'?'rientrato (entrata)':'concesso (uscita)'}`:(isIncome?'Entrata':'Uscita');
+  if(isLoan){
+    movementEditModal.querySelector('label[for="movementEditDescription"]').textContent='Descrizione prestito (es. nome persona)';
+  }else{
+    movementEditModal.querySelector('label[for="movementEditDescription"]').textContent='Descrizione (opzionale)';
+  }
+  if(!isLoan&&isIncome){
     movementEditIncomeCategory.innerHTML=incomeCategories().map(category=>`<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join('');
     movementEditIncomeCategory.value=movement.category||incomeCategories()[0];
   }else{
@@ -3799,7 +3806,9 @@ movementEditForm.addEventListener('submit',event=>{
   movement.amount=amount;
   movement.accountId=movementEditAccount.value;movement.method=accountById(movementEditAccount.value)?.name||'';
   const newDescription=movementEditDescription.value.trim();
-  if(editingMovement.type==='income'){
+  if(typeof isLoanEntry==='function'&&isLoanEntry(movement)){
+    movement.description=newDescription||(movement.loanDirection==='in'?'Rientro prestito':'Prestito');
+  }else if(editingMovement.type==='income'){
     movement.category=movementEditIncomeCategory.value;
     movement.description=newDescription||movement.category;
   }else{
