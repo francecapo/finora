@@ -2554,13 +2554,13 @@ const euro=n=>new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',max
 const euro0=n=>new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(n)||0);
 const localDateKey=(d=new Date())=>{const z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`};
 const escapeHtml=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-function baseState(){return {version:11,updatedAt:0,expenses:[],incomes:[],transfers:[],accounts:[],patrimony:{},patrimonySnapshots:[],monthlySnapshots:[],budgetTargets:{necessita:50,extra:30,risparmi:20},categoryBudgets:{},paymentMethods:[...DEFAULT_PAYMENT_METHODS],customIncomeCategories:[],hiddenIncomeCategories:[],customCategories:{necessita:[],extra:[],risparmi:[]},hiddenCategories:{necessita:[],extra:[],risparmi:[]},settings:{monthStartDay:1},monthPeriods:{}};}
+function baseState(){return {version:11,updatedAt:0,expenses:[],incomes:[],transfers:[],accounts:[],patrimony:{},patrimonySnapshots:[],monthlySnapshots:[],budgetTargets:{necessita:50,extra:30,risparmi:20},categoryBudgets:{},paymentMethods:[...DEFAULT_PAYMENT_METHODS],customIncomeCategories:[],hiddenIncomeCategories:[],customAccountTypes:[],customCategories:{necessita:[],extra:[],risparmi:[]},hiddenCategories:{necessita:[],extra:[],risparmi:[]},settings:{monthStartDay:1},monthPeriods:{}};}
 function normalizeStateData(data={}){const next={...baseState(),...data};next.expenses=Array.isArray(data.expenses)?data.expenses:[];next.incomes=Array.isArray(data.incomes)?data.incomes:[];next.transfers=Array.isArray(data.transfers)?data.transfers.map(t=>({
       ...t,
       budgetImpact:t.budgetImpact==='investment'?'investment':'neutral',
       investmentCategory:String(t.investmentCategory||'PAC'),
       description:String(t.description||'')
-    })):[];next.accounts=Array.isArray(data.accounts)?data.accounts.map(a=>({id:String(a.id||''),name:String(a.name||'Conto'),type:['investment','emergency','pension'].includes(a.type)?a.type:'liquidity',initialBalance:Number(a.initialBalance||0),icon:String(a.icon||defaultAccountIcon(a.type)),color:String(a.color||defaultAccountColor(a.type)),createdAt:Number(a.createdAt||0)})).filter(a=>a.id):[];next.patrimony=data.patrimony&&typeof data.patrimony==='object'&&!Array.isArray(data.patrimony)?data.patrimony:{};next.patrimonySnapshots=(Array.isArray(data.patrimonySnapshots)?data.patrimonySnapshots:[]).map(x=>({id:String(x.id||''),date:String(x.date||'').slice(0,10),amount:Number(x.amount||0)})).filter(x=>x.id&&/^\d{4}-\d{2}-\d{2}$/.test(x.date)).sort((a,b)=>a.date<b.date?-1:1);const targets=data.budgetTargets&&typeof data.budgetTargets==='object'?data.budgetTargets:{};next.budgetTargets={necessita:Number.isFinite(Number(targets.necessita))?Math.max(0,Math.min(100,Number(targets.necessita))):50,extra:Number.isFinite(Number(targets.extra))?Math.max(0,Math.min(100,Number(targets.extra))):30,risparmi:Number.isFinite(Number(targets.risparmi))?Math.max(0,Math.min(100,Number(targets.risparmi))):20};const methods=Array.isArray(data.paymentMethods)?data.paymentMethods:DEFAULT_PAYMENT_METHODS;next.paymentMethods=[...new Set(methods.map(x=>String(x||'').trim()).filter(Boolean))];if(!next.paymentMethods.length)next.paymentMethods=[...DEFAULT_PAYMENT_METHODS];next.customIncomeCategories=[...new Set((Array.isArray(data.customIncomeCategories)?data.customIncomeCategories:[]).map(x=>String(x||'').trim()).filter(x=>x&&!BASE_INCOME_CATEGORIES.includes(x)))];next.hiddenIncomeCategories=[...new Set((Array.isArray(data.hiddenIncomeCategories)?data.hiddenIncomeCategories:[]).map(x=>String(x||'').trim()).filter(Boolean))];const custom=data.customCategories&&typeof data.customCategories==='object'?data.customCategories:{};next.customCategories={necessita:Array.isArray(custom.necessita)?custom.necessita:[],extra:Array.isArray(custom.extra)?custom.extra:[],risparmi:Array.isArray(custom.risparmi)?custom.risparmi:[]};const hidden=data.hiddenCategories&&typeof data.hiddenCategories==='object'?data.hiddenCategories:{};next.hiddenCategories={necessita:Array.isArray(hidden.necessita)?hidden.necessita:[],extra:Array.isArray(hidden.extra)?hidden.extra:[],risparmi:Array.isArray(hidden.risparmi)?hidden.risparmi:[]};const settings=data.settings&&typeof data.settings==='object'?data.settings:{};const startDay=Number(settings.monthStartDay);next.settings={monthStartDay:Number.isFinite(startDay)?Math.min(28,Math.max(1,Math.round(startDay))):1};next.monthPeriods={};const periods=data.monthPeriods&&typeof data.monthPeriods==='object'&&!Array.isArray(data.monthPeriods)?data.monthPeriods:{};for(const [pKey,pValue] of Object.entries(periods)){if(/^\d{4}-\d{2}$/.test(pKey)&&/^\d{4}-\d{2}-\d{2}$/.test(String(pValue)))next.monthPeriods[pKey]=String(pValue);}const rawBudgets=data.categoryBudgets&&typeof data.categoryBudgets==='object'&&!Array.isArray(data.categoryBudgets)?data.categoryBudgets:{};next.categoryBudgets={};for(const [bKey,bValue] of Object.entries(rawBudgets)){const n=Number(bValue);if(Number.isFinite(n)&&n>0)next.categoryBudgets[String(bKey)]=n;}next.monthlySnapshots=(Array.isArray(data.monthlySnapshots)?data.monthlySnapshots:[]).map(x=>({key:String(x.key||'').slice(0,7),periodEnd:String(x.periodEnd||'').slice(0,10),amount:Number(x.amount||0),manual:!!x.manual,updatedAt:Number(x.updatedAt||0)})).filter(x=>/^\d{4}-\d{2}$/.test(x.key)&&Number.isFinite(x.amount)).filter((x,i,arr)=>arr.findIndex(y=>y.key===x.key)===i).sort((a,b)=>a.key<b.key?-1:1);next.updatedAt=Number(data.updatedAt)||0;next.version=11;delete next.income;return next;}
+    })):[];const _customTypes=(Array.isArray(data.customAccountTypes)?data.customAccountTypes:[]).map(t=>({id:String(t.id||''),label:String(t.label||'').trim()})).filter(t=>t.id&&t.label&&!['liquidity','emergency','investment','pension'].includes(t.id));next.customAccountTypes=_customTypes.filter((t,i)=>_customTypes.findIndex(x=>x.id===t.id)===i);next.accounts=Array.isArray(data.accounts)?data.accounts.map(a=>({id:String(a.id||''),name:String(a.name||'Conto'),type:(['investment','emergency','pension'].includes(a.type)||_customTypes.some(t=>t.id===a.type))?a.type:'liquidity',initialBalance:Number(a.initialBalance||0),icon:String(a.icon||defaultAccountIcon(a.type)),color:String(a.color||defaultAccountColor(a.type)),createdAt:Number(a.createdAt||0)})).filter(a=>a.id):[];next.patrimony=data.patrimony&&typeof data.patrimony==='object'&&!Array.isArray(data.patrimony)?data.patrimony:{};next.patrimonySnapshots=(Array.isArray(data.patrimonySnapshots)?data.patrimonySnapshots:[]).map(x=>({id:String(x.id||''),date:String(x.date||'').slice(0,10),amount:Number(x.amount||0)})).filter(x=>x.id&&/^\d{4}-\d{2}-\d{2}$/.test(x.date)).sort((a,b)=>a.date<b.date?-1:1);const targets=data.budgetTargets&&typeof data.budgetTargets==='object'?data.budgetTargets:{};next.budgetTargets={necessita:Number.isFinite(Number(targets.necessita))?Math.max(0,Math.min(100,Number(targets.necessita))):50,extra:Number.isFinite(Number(targets.extra))?Math.max(0,Math.min(100,Number(targets.extra))):30,risparmi:Number.isFinite(Number(targets.risparmi))?Math.max(0,Math.min(100,Number(targets.risparmi))):20};const methods=Array.isArray(data.paymentMethods)?data.paymentMethods:DEFAULT_PAYMENT_METHODS;next.paymentMethods=[...new Set(methods.map(x=>String(x||'').trim()).filter(Boolean))];if(!next.paymentMethods.length)next.paymentMethods=[...DEFAULT_PAYMENT_METHODS];next.customIncomeCategories=[...new Set((Array.isArray(data.customIncomeCategories)?data.customIncomeCategories:[]).map(x=>String(x||'').trim()).filter(x=>x&&!BASE_INCOME_CATEGORIES.includes(x)))];next.hiddenIncomeCategories=[...new Set((Array.isArray(data.hiddenIncomeCategories)?data.hiddenIncomeCategories:[]).map(x=>String(x||'').trim()).filter(Boolean))];const custom=data.customCategories&&typeof data.customCategories==='object'?data.customCategories:{};next.customCategories={necessita:Array.isArray(custom.necessita)?custom.necessita:[],extra:Array.isArray(custom.extra)?custom.extra:[],risparmi:Array.isArray(custom.risparmi)?custom.risparmi:[]};const hidden=data.hiddenCategories&&typeof data.hiddenCategories==='object'?data.hiddenCategories:{};next.hiddenCategories={necessita:Array.isArray(hidden.necessita)?hidden.necessita:[],extra:Array.isArray(hidden.extra)?hidden.extra:[],risparmi:Array.isArray(hidden.risparmi)?hidden.risparmi:[]};const settings=data.settings&&typeof data.settings==='object'?data.settings:{};const startDay=Number(settings.monthStartDay);next.settings={monthStartDay:Number.isFinite(startDay)?Math.min(28,Math.max(1,Math.round(startDay))):1};next.monthPeriods={};const periods=data.monthPeriods&&typeof data.monthPeriods==='object'&&!Array.isArray(data.monthPeriods)?data.monthPeriods:{};for(const [pKey,pValue] of Object.entries(periods)){if(/^\d{4}-\d{2}$/.test(pKey)&&/^\d{4}-\d{2}-\d{2}$/.test(String(pValue)))next.monthPeriods[pKey]=String(pValue);}const rawBudgets=data.categoryBudgets&&typeof data.categoryBudgets==='object'&&!Array.isArray(data.categoryBudgets)?data.categoryBudgets:{};next.categoryBudgets={};for(const [bKey,bValue] of Object.entries(rawBudgets)){const n=Number(bValue);if(Number.isFinite(n)&&n>0)next.categoryBudgets[String(bKey)]=n;}next.monthlySnapshots=(Array.isArray(data.monthlySnapshots)?data.monthlySnapshots:[]).map(x=>({key:String(x.key||'').slice(0,7),periodEnd:String(x.periodEnd||'').slice(0,10),amount:Number(x.amount||0),manual:!!x.manual,updatedAt:Number(x.updatedAt||0)})).filter(x=>/^\d{4}-\d{2}$/.test(x.key)&&Number.isFinite(x.amount)).filter((x,i,arr)=>arr.findIndex(y=>y.key===x.key)===i).sort((a,b)=>a.key<b.key?-1:1);next.updatedAt=Number(data.updatedAt)||0;next.version=11;delete next.income;return next;}
 function normalizedCategoryKey(group,item){return `${String(group||'').trim().toLocaleLowerCase('it')}|||${String(item||'').trim().toLocaleLowerCase('it')}`;}
 function isCategoryHidden(section,group,item){return state.hiddenCategories[section].includes(normalizedCategoryKey(group,item));}
 function schemaForMonth(month){const base=CATEGORY_SCHEMA[month]||CATEGORY_SCHEMA[MONTHS[0]],schema={necessita:base.necessita.map(g=>({name:g.name,items:[...g.items]})),extra:base.extra.map(g=>({name:g.name,items:[...g.items]})),risparmi:[...base.risparmi]};for(const section of ['necessita','extra'])for(const custom of state.customCategories[section]){const group=String(custom.group||'ALTRO').trim()||'ALTRO',item=String(custom.item||'').trim();if(!item)continue;let target=schema[section].find(g=>g.name.toLocaleLowerCase('it')===group.toLocaleLowerCase('it'));if(!target){target={name:group,items:[]};schema[section].push(target);}if(!target.items.some(x=>x.toLocaleLowerCase('it')===item.toLocaleLowerCase('it')))target.items.push(item);}for(const custom of state.customCategories.risparmi){const item=String(custom.item||custom||'').trim();if(item&&!schema.risparmi.some(x=>x.toLocaleLowerCase('it')===item.toLocaleLowerCase('it')))schema.risparmi.push(item);}for(const section of ['necessita','extra'])schema[section]=schema[section].map(g=>({...g,items:g.items.filter(item=>!isCategoryHidden(section,g.name,item))})).filter(g=>g.items.length);schema.risparmi=schema.risparmi.filter(item=>!isCategoryHidden('risparmi','',item));return schema;}
@@ -2684,10 +2684,10 @@ const ACCOUNT_ICONS={
 };
 const ACCOUNT_COLORS=['#68d3aa','#68aee8','#d07ad5','#edcb58','#ee7d74','#a9b5c5'];
 function defaultAccountIcon(type){
-  return type==='investment'?'chart':type==='emergency'?'emergency':type==='pension'?'pension':'bank';
+  return type==='investment'?'chart':type==='emergency'?'emergency':type==='pension'?'pension':accountTypeValid(type)&&type!=='liquidity'?'wallet':'bank';
 }
 function defaultAccountColor(type){
-  return type==='investment'?'#d07ad5':type==='emergency'?'#edcb58':type==='pension'?'#68aee8':'#68d3aa';
+  return accountTypeValid(type)?accountTypeColor(type):'#68d3aa';
 }
 let selectedAccountIcon='bank';
 let selectedAccountColor='#68d3aa';
@@ -2731,6 +2731,32 @@ function openAccountEdit(id){
   setTimeout(()=>accountEditName.focus(),0);
 }
 
+function populateAccountTypeSelects(keepValue){
+  const custom=customAccountTypes();
+  for(const id of ['accountType','accountEditType']){
+    const sel=document.getElementById(id);if(!sel)continue;
+    const prev=sel.value;
+    sel.innerHTML='<option value="liquidity">Liquidità</option><option value="emergency">Fondo di emergenza</option><option value="investment">Investimento</option><option value="pension">Pensione integrativa</option>'
+      +custom.map(t=>`<option value="${t.id}">${escapeHtml(t.label)}</option>`).join('')
+      +'<option value="__new">＋ Nuova tipologia…</option>';
+    sel.value=(keepValue&&[...sel.options].some(o=>o.value===prev))?prev:'liquidity';
+  }
+}
+function handleAccountTypeSelectChange(select){
+  if(select.value!=='__new')return;
+  const name=(window.prompt('Nome della nuova tipologia di conto (es. Conto deposito):')||'').trim();
+  if(!name){select.value='liquidity';return;}
+  const existing=customAccountTypes().find(t=>t.label.toLowerCase()===name.toLowerCase());
+  let id;
+  if(existing){id=existing.id;}
+  else{
+    id='custom-'+Date.now().toString(36);
+    state.customAccountTypes=[...customAccountTypes(),{id,label:name}];
+    save();
+  }
+  populateAccountTypeSelects(true);
+  select.value=id;
+}
 function renderAccountStylePickers(){
   const iconGrid=document.getElementById('accountIconGrid');
   const colorGrid=document.getElementById('accountColorGrid');
@@ -2788,12 +2814,24 @@ function syncMovementMethodsWithAccounts(){
 
 
 
+function customAccountTypes(){return (state&&Array.isArray(state.customAccountTypes))?state.customAccountTypes:[];}
+function customAccountTypeById(id){return customAccountTypes().find(t=>t.id===id)||null;}
+function accountTypeValid(type){return ['liquidity','emergency','investment','pension'].includes(type)||!!customAccountTypeById(type);}
+function accountTypeSingular(type){
+  const custom=customAccountTypeById(type);
+  if(custom)return custom.label;
+  return type==='investment'?'Investimento':type==='emergency'?'Fondo di emergenza':type==='pension'?'Pensione integrativa':'Liquidità';
+}
 function accountTypeLabel(type){
+  const custom=customAccountTypeById(type);
+  if(custom)return custom.label;
   return type==='investment'?'Investimenti':
          type==='emergency'?'Fondo di emergenza':
          type==='pension'?'Pensione integrativa':'Liquidità';
 }
 function accountTypeColor(type){
+  const customIdx=customAccountTypes().findIndex(t=>t.id===type);
+  if(customIdx>=0)return ACCOUNT_COLORS[customIdx%ACCOUNT_COLORS.length];
   return type==='investment'?'#d07ad5':
          type==='emergency'?'#edcb58':
          type==='pension'?'#68aee8':'#68d3aa';
@@ -2834,7 +2872,7 @@ function renderPatrimonyComposition(){
 
   const grouped={liquidity:0,emergency:0,investment:0,pension:0};
   for(const account of state.accounts){
-    grouped[account.type in grouped?account.type:'liquidity']+=accountBalance(account.id);
+    {const key=accountTypeValid(account.type)?account.type:'liquidity';grouped[key]=(grouped[key]||0)+accountBalance(account.id);}
   }
   const rows=Object.entries(grouped)
     .map(([type,value])=>({type,value}))
@@ -2888,7 +2926,7 @@ function renderAccounts(){
       <div class="account-card-icon">${ACCOUNT_ICONS[a.icon]||ACCOUNT_ICONS[defaultAccountIcon(a.type)]}</div>
       <div>
         <div class="account-name">${escapeHtml(a.name)}</div>
-        <div class="account-type">${a.type==='investment'?'Investimento':a.type==='emergency'?'Fondo di emergenza':a.type==='pension'?'Pensione integrativa':'Liquidità'}</div>
+        <div class="account-type">${accountTypeSingular(a.type)}</div>
         
       </div>
       <div class="account-card-balance">
@@ -2941,7 +2979,7 @@ function renderAccountDetail(){
   }
   const color=account.color||defaultAccountColor(account.type);
   const icon=ACCOUNT_ICONS[account.icon]||ACCOUNT_ICONS[defaultAccountIcon(account.type)];
-  const typeLabel=account.type==='investment'?'Investimento':account.type==='emergency'?'Fondo di emergenza':account.type==='pension'?'Pensione integrativa':'Liquidità';
+  const typeLabel=accountTypeSingular(account.type);
   const rows=accountMovementsFor(account.id).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(Number(a.entry.createdAt||0)-Number(b.entry.createdAt||0)));
   const initial=Number(account.initialBalance||0);
   let running=initial;
@@ -3412,6 +3450,7 @@ if(accountEditBalanceDate){
   });
 }
 accountEditType.addEventListener('change',e=>{
+  handleAccountTypeSelectChange(e.target);
   selectedEditAccountIcon=defaultAccountIcon(e.target.value);
   selectedEditAccountColor=defaultAccountColor(e.target.value);
   renderAccountEditStylePickers();
@@ -3435,7 +3474,7 @@ accountEditForm.addEventListener('submit',e=>{
     return;
   }
   account.name=name;
-  account.type=['investment','emergency','pension'].includes(accountEditType.value)?accountEditType.value:'liquidity';
+  account.type=accountTypeValid(accountEditType.value)?accountEditType.value:'liquidity';
   account.initialBalance=initial;
   account.icon=selectedEditAccountIcon;
   account.color=selectedEditAccountColor;
@@ -3475,10 +3514,12 @@ document.getElementById('accountColorGrid').addEventListener('click',e=>{
   renderAccountStylePickers();
 });
 document.getElementById('accountType').addEventListener('change',e=>{
+  handleAccountTypeSelectChange(e.target);
   selectedAccountIcon=defaultAccountIcon(e.target.value);
   selectedAccountColor=defaultAccountColor(e.target.value);
   renderAccountStylePickers();
 });
+populateAccountTypeSelects(true);
 renderAccountStylePickers();
 
 document.getElementById('accountForm').addEventListener('submit',e=>{
@@ -3501,7 +3542,7 @@ document.getElementById('accountForm').addEventListener('submit',e=>{
   state.accounts.push({
     id:uid(),
     name,
-    type:['investment','emergency','pension'].includes(typeInput.value)?typeInput.value:'liquidity',
+    type:accountTypeValid(typeInput.value)?typeInput.value:'liquidity',
     initialBalance:initial,
     icon:selectedAccountIcon,
     color:selectedAccountColor,
